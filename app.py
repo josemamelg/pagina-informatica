@@ -1,13 +1,14 @@
-from flask import Flask, render_template
+import http.server
+import socketserver
 
-app = Flask(__name__)
+# Define el puerto en el que deseas ejecutar el servidor
+PORT = 8000
 
-@app.route('/')
-def index():
-    # Puedes agregar tu lógica de Python aquí para generar contenido dinámico.
-    contenido_python = "¡Hola desde Python!"
+# Crea un manejador que sirva los archivos desde el directorio actual
+Handler = http.server.SimpleHTTPRequestHandler
 
-    return render_template('index.html', contenido_python=contenido_python)
-
-if __name__ == '__main__':
-       app.run(debug=True)
+# Inicia el servidor
+with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    print(f"Serving at port {PORT}")
+    # Comienza a servir
+    httpd.serve_forever()
